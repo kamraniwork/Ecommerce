@@ -32,8 +32,10 @@ class Category(models.Model):
         max_length=255,
         unique=True
     )
-    parent = models.ManyToManyField(
+    parent = models.ForeignKey(
         "self",
+        on_delete=models.SET_NULL,
+        null=True,
         blank=True,
         related_name="children"
     )
@@ -54,6 +56,7 @@ class ProductType(models.Model):
     """
     ProductType Table will provide a list of the different types
     of products that are for sale.
+    این قسمت میگه که اصلا جنس این محصول چیه!! مثل دیجیکالا که یه بخش داره مثلا کتاب یا لواز دیجیتال و... این هم همونه
          ┌─────────────────────┐
          │                     │
          │                   ┌─┼─┐
@@ -91,6 +94,8 @@ class ProductSpecification(models.Model):
     """
     The Product Specification Table contains product
     specifiction or features for the product types.
+    این جدول میاد و ویژگی های یک جنس رو نگه میداره. مثلا اگر کتاب باشه میشه تعداد صفحات و نویسنده و ...
+    چون ویژگی های یک جنس از محصول در مثال بالا کتاب یکی است پس لازم نیست برای هر محصول کتابی که مینویسیم یک ویژگی تعریف کنیم
                      ┌─────────────────────┐
                      │                     │
                      │                   ┌─┼─┐
