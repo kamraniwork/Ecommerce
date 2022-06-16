@@ -42,7 +42,7 @@ THIRD_PARTY_APPS = [
 ]
 
 LOCAL_APPS = [
-
+    'product.apps.ProductConfig',
 ]
 
 INSTALLED_APPS = DEFAULT_APP + THIRD_PARTY_APPS + LOCAL_APPS
