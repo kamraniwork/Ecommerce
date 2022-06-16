@@ -1,6 +1,7 @@
 # ECOMMERCE 
 
 1. [run project](#run-project)
+2. [tests](#tests)
 
 ## Run Project
 * ###### Requirements:
@@ -86,4 +87,14 @@
     └─────────────┘      └────────────┘          xx
     ```
   
-     
+## tests
+* ###### use coverage:
+     I use coverage package for measure the quality of the test:
+     ```text
+      coverage run manage.py test
+      coverage report -m
+     ```
+    for dont check Extra files must:
+    ```text
+      coverage run —omit='*/venv/*' manage.py test
+    ```
