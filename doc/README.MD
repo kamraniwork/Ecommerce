@@ -13,6 +13,26 @@
      ```text
       pipreqs --force
      ```
+* ###### Database for product model
+    use `https://vuerd.github.io/` website
+    ![ScreenShot](pic/uml.png)
+    and use `https://asciiflow.com/` for:
+    ```text
+         ┌─────────────────────┐
+         │                     │
+         │                   ┌─┼─┐
+    ┌────┴────────┐      ┌───┴─┼─┴────┐  xxxxx       xxxxxx
+    │             │      │     │      │ xx   xx   xxxx   xx
+    │             │      │  product   │ x     xxxxx      xx
+    │             │      │            │xx       x        xx
+    │    product  │      │  image     │ x               xx
+    │             │      │            │ xx             xxx
+    │             │      │  alt_text  │  xxx           xx
+    │             │      │            │   xx          xx
+    │             │      │  is_feature│     xx       xx
+    │             │      │            │      xxx    xx
+    │             │      │  create_at │        xxxxx
+    └─────────────┘      └────────────┘          xx
+    ```
+  
      
-     
-      
