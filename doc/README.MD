@@ -209,3 +209,22 @@
         ]
     }
     ```
+## delete category
+* ###### Description: 
+    delete category object by slug field
+    
+* ###### Request: `delete`  `http://localhost:8000/category/{slug}`
+* ###### Param: `None`
+* ###### response:
+    if OK request:
+    `status=200`
+    ```json
+      {"status": "deleted object"}
+    ```
+    else if there is error:
+    `status=404`
+    ```json
+    {
+        "status":"Not found"
+    }
+    ```
