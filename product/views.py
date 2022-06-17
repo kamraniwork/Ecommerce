@@ -1,6 +1,7 @@
 from rest_framework.viewsets import ViewSet
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from exention.throttling import CustomThrottlingUser
 from django.db.models import Q
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -25,6 +26,15 @@ class CategoryViewSet(ViewSet):
             permission_classes = ()
 
         return [permission() for permission in permission_classes]
+
+    def get_throttles(self):
+        """
+        user can 4 post request per second, for create notice object
+        CustomThrottlingUser ==> /throttling.py
+        :return:
+        """
+        throttle_classes = (CustomThrottlingUser,)
+        return [throttle() for throttle in throttle_classes]
 
     def list(self, request):
         """
