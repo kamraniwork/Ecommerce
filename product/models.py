@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from .managers import CategoryManager
 
 
 class Category(models.Model):
@@ -50,6 +51,8 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+    objects = CategoryManager()
 
 
 class ProductType(models.Model):
