@@ -1,7 +1,11 @@
 # ECOMMERCE 
 
 1. [run project](#run-project)
+    *   [requirements](#requirements)
+    *   [Database for product model](#database-for-product-model)
 2. [tests](#tests)
+    *   [coverage](#use-coverage)
+3. [endpoints](#endpoints)
 
 ## Run Project
 * ###### Requirements:
@@ -12,7 +16,7 @@
      ```
      If this file already exists, you must use:
      ```text
-      pipreqs --force
+      pipreqs --encoding=utf8 --force .
      ```
 * ###### Database for product model
     use `https://vuerd.github.io/` website
@@ -98,3 +102,35 @@
     ```text
       coverage run —omit='*/venv/*' manage.py test
     ```
+
+## endpoints
+### list category
+*   ###### Description: 
+       return many nested category object that `is_active==True`
+* ###### Request: `GET`  `http://localhost:8000/category/`
+* ###### Param: `None`
+* ###### Response:
+```json
+[
+    {
+        "name": "کنکور",
+        "slug": "nor",
+        "parent": null,
+        "children": [
+            {
+                "name": "سیستم عامل",
+                "slug": "sstm-aaml",
+                "parent": 1,
+                "children": [
+                    {
+                        "name": "مدیریت دیسک",
+                        "slug": "mdrt-ds",
+                        "parent": 2,
+                        "children": []
+                    }
+                ]
+            }
+        ]
+    }
+]
+```
