@@ -134,3 +134,78 @@
     }
 ]
 ```
+## create category
+* ###### Description: 
+    jsut superuser can create new category object
+    
+* ###### Request: `post`  `http://localhost:8000/category/`
+* ###### Param:
+    *   `name`: required | ![](https://img.shields.io/static/v1?label=&message=string&color=red)
+    *   `slug`: required | ![](https://img.shields.io/static/v1?label=&message=string&color=red)
+    *   `parent_name`: required | ![](https://img.shields.io/static/v1?label=&message=string&color=red)
+* ###### example:
+```json
+{
+    "name":"مدیریت حافظه",
+    "slug":"mhafeze",
+    "parent_name":"سیستم عامل"
+}
+```
+* ###### response:
+    if OK request:
+    `status=200`
+    ```json
+      {"status": "create category object successfully"}
+    ```
+    else if there is error:
+    `status=400`
+    ```json
+    {
+        "name": [
+            "This field is required."
+        ],
+        "slug": [
+            "This field is required."
+        ]
+    }
+    ```
+  
+## update category
+* ###### Description: 
+    jsut superuser can update category object
+    
+* ###### Request: `put`  `http://localhost:8000/category/{slug}`
+* ###### Param:
+    *   `name`: not required | ![](https://img.shields.io/static/v1?label=&message=string&color=red)
+    *   `slug`: not required | ![](https://img.shields.io/static/v1?label=&message=string&color=red)
+    *   `parent_name`: not required | ![](https://img.shields.io/static/v1?label=&message=string&color=red)
+* ###### example:
+```json
+{
+    "name":"مدیریت حافظه",
+    "slug":"mhafeze",
+    "parent_name":"سیستم عامل"
+}
+```
+* ###### response:
+    if OK request:
+    `status=200`
+    ```json
+      {
+        "name":"مدیریت حافظه",
+        "slug":"mhafeze",
+        "parent_name":"سیستم عامل"
+      }
+    ```
+    else if there is error:
+    `status=400`
+    ```json
+    {
+        "name": [
+            "This field is required."
+        ],
+        "slug": [
+            "This field is required."
+        ]
+    }
+    ```

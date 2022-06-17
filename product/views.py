@@ -34,6 +34,12 @@ class CategoryViewSet(ViewSet):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def retrieve(self, request, slug=None):
+        category = get_object_or_404(Category, slug=slug)
+
+        serializer = CategoryListSerializer(instance=category, context={'request': request})
+        return Response(serializer.data)
+
     def update(self, request, slug=None):
         category = get_object_or_404(Category, slug=slug)
         serializer = CategoryInputSerializers(category, data=request.data)
