@@ -15,6 +15,17 @@ from django.shortcuts import get_object_or_404
 class CategoryViewSet(ViewSet):
     lookup_field = 'slug'
 
+    def get_permissions(self):
+        """
+        just superuser can create and update and destroy category
+        """
+        if self.action in ['create', 'update', 'destroy']:
+            permission_classes = (IsAdminUser,)
+        else:
+            permission_classes = ()
+
+        return [permission() for permission in permission_classes]
+
     def list(self, request):
         """
         show list category object
