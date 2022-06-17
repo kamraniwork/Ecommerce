@@ -16,6 +16,12 @@ class CategoryViewSet(ViewSet):
     lookup_field = 'slug'
 
     def list(self, request):
+        """
+        show list category object
+        show all nested category (sub category)
+        :param request:
+        :return:
+        """
         category_list = Category.objects.active()
         serializer = CategoryListSerializer(instance=category_list, context={'request': request}, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -35,12 +41,22 @@ class CategoryViewSet(ViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, slug=None):
+        """
+        show category object
+        :param slug:
+        :return:
+        """
         category = get_object_or_404(Category, slug=slug)
 
         serializer = CategoryListSerializer(instance=category, context={'request': request})
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def update(self, request, slug=None):
+        """
+        update object category by slug field
+        you can change name:char , slug:char , parent_name:char(can null)
+        :return:
+        """
         category = get_object_or_404(Category, slug=slug)
         serializer = CategoryInputSerializers(category, data=request.data)
         if serializer.is_valid():
@@ -48,3 +64,13 @@ class CategoryViewSet(ViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, slug=None):
+        """
+        destroy category object by slug field
+        :param slug:
+        :return:
+        """
+        category = get_object_or_404(Category, slug=slug)
+        category.delete()
+        return Response({'status': 'deleted object'}, status=status.HTTP_200_OK)
