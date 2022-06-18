@@ -118,7 +118,7 @@ class ProductSpecification(models.Model):
                 └─────────────┘      └────────────┘
     """
 
-    product_type = models.ForeignKey(ProductType, on_delete=models.CASCADE)
+    product_type = models.ForeignKey(ProductType, on_delete=models.CASCADE, related_name='typed_product')
     name = models.CharField(
         verbose_name=_("Name"),
         help_text=_("Required"),

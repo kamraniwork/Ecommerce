@@ -5,12 +5,14 @@ from exention.throttling import CustomThrottlingUser
 from django.db.models import Q
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import Category, ProductType
+from .models import Category, ProductType, ProductSpecification
 from .serializers import (
     CategoryListSerializer,
     CategoryInputSerializers,
     ProductTypeSerializer,
-    ProductTypeInputSerializer
+    ProductTypeDetailSerializer,
+    ProductTypeInputSerializer,
+    ProductSpecificationListSerializer
 )
 from django.shortcuts import get_object_or_404
 
@@ -151,7 +153,7 @@ class ProductTypeViewSet(ViewSet):
         """
         product_type = get_object_or_404(ProductType, pk=pk, is_active=True)
 
-        serializer = ProductTypeSerializer(instance=product_type, context={'request': request})
+        serializer = ProductTypeDetailSerializer(instance=product_type, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def update(self, request, pk=None):
@@ -177,3 +179,39 @@ class ProductTypeViewSet(ViewSet):
         product_type = get_object_or_404(ProductType, pk=pk)
         product_type.delete()
         return Response({'status': 'deleted object'}, status=status.HTTP_200_OK)
+
+
+class ProductSpecificationViewSet(ViewSet):
+    def get_permissions(self):
+        """
+        just superuser can create and update and destroy object
+        """
+        if self.action in ['create', 'update', 'destroy']:
+            permission_classes = (IsAdminUser,)
+        else:
+            permission_classes = ()
+
+        return [permission() for permission in permission_classes]
+
+    def get_throttles(self):
+        """
+        user can 4 post request per second, for create notice object
+        CustomThrottlingUser ==> /throttling.py
+        :return:
+        """
+        throttle_classes = (CustomThrottlingUser,)
+        return [throttle() for throttle in throttle_classes]
+
+    @action(detail=True, methods=['get'], permission_classes=(IsAdminUser,),
+            name='list product_specification for each product_specification')
+    def list_specification_product_type(self, request, pk):
+        """
+        list product_specification objects for each product_type
+        pk is product_type object primary key
+        """
+
+        product_type = get_object_or_404(ProductType, pk=pk, is_active=True)
+        product_specification = ProductSpecification.objects.filter(product_type=product_type)
+        serializer = ProductSpecificationListSerializer(instance=product_specification, context={'request': request},
+                                                        many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

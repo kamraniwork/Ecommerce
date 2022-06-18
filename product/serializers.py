@@ -65,6 +65,27 @@ class CategoryInputSerializers(serializers.Serializer):
         return instance
 
 
+class ProductSpecificationListSerializer(serializers.ModelSerializer):
+    """
+    show product_specification object
+    """
+
+    class Meta:
+        model = ProductType
+        fields = ('pk', 'name')
+
+
+class ProductTypeDetailSerializer(serializers.ModelSerializer):
+    """
+    show product_type object and product specification list for that
+    """
+    typed_product = ProductSpecificationListSerializer(many=True)
+
+    class Meta:
+        model = ProductType
+        fields = ('pk', 'name', 'typed_product')
+
+
 class ProductTypeSerializer(serializers.ModelSerializer):
     """
     show product_type object
@@ -72,7 +93,7 @@ class ProductTypeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ProductType
-        fields = ('name',)
+        fields = ('pk', 'name')
 
 
 class ProductTypeInputSerializer(serializers.ModelSerializer):
