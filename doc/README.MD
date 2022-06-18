@@ -229,7 +229,104 @@
         "status":"Not found"
     }
     ```
+### list product_type
+*   ###### Description: 
+       return product_type object that `is_active==True`
+* ###### Request: `GET`  `http://localhost:8000/product-type/`
+* ###### Param: `None`
+* ###### Response:
+```json
+[
+    {
+        "name": "کتاب"
+    }
+]
+```
+## create product_type
+* ###### Description: 
+    jsut superuser can create new product_type object
+    
+* ###### Request: `post`  `http://localhost:8000/product-type/`
+* ###### Param:
+    *   `name`: required | ![](https://img.shields.io/static/v1?label=&message=string&color=red)
+    *   `is_active`: required | ![](https://img.shields.io/static/v1?label=&message=string&color=red)
+
+* ###### example:
+```json
+{
+    "name":"لوازم دیجیتال",
+    "is_active": "true"
+}
+```
+* ###### response:
+    if OK request:
+    `status=200`
+    ```json
+      {"status": "create product_type object successfully"}
+    ```
+    else if there is error:
+    `status=400`
+    ```json
+    {
+        "name": [
+            "This field is required."
+        ]
+    }
+    ```
   
+## update product_type
+* ###### Description: 
+    jsut superuser can update product_type object
+    
+* ###### Request: `put`  `http://localhost:8000/product-type/{pk}`
+* ###### Param:
+    *   `name`: not required | ![](https://img.shields.io/static/v1?label=&message=string&color=red)
+    *   `is_active`: not required | ![](https://img.shields.io/static/v1?label=&message=string&color=red)
+  
+* ###### example:
+```json
+{
+    "name":"لوازم دیجیتال",
+    "is_active": "true"
+}
+```
+* ###### response:
+    if OK request:
+    `status=200`
+    ```json
+    {
+      "name":"لوازم دیجیتال",
+      "is_active": "true"
+    }
+    ```
+    else if there is error:
+    `status=400`
+    ```json
+    {
+        "name": [
+            "This field is required."
+        ]
+    }
+    ```
+## delete product_type
+* ###### Description: 
+    delete product_type object by pk field
+    
+* ###### Request: `delete`  `http://localhost:8000/product-type/{pk}`
+* ###### Param: `None`
+* ###### response:
+    if OK request:
+    `status=200`
+    ```json
+      {"status": "deleted object"}
+    ```
+    else if there is error:
+    `status=404`
+    ```json
+    {
+        "status":"Not found"
+    }
+    ```
 ## security
 * ###### use throttling:
 user can not more than 3 each per second
@@ -239,19 +336,10 @@ from pytimeparse.timeparse import timeparse
 from rest_framework.throttling import UserRateThrottle
 
 class CustomThrottlingUser(UserRateThrottle):
-    """
-    scope ==> for know that which class or url
-    rate ==> THROTTLE_RATES in base.py
-    use in /views.py
-    """
     scope = 'apps'
     rate = '3/1s'
 
     def parse_rate(self, rate):
-        """
-        Given the request rate string, return a two tuple of:
-        <allowed number of requests>, <period of time in seconds>
-        """
 
         if rate is None:
             return None, None
