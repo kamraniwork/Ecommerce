@@ -7,7 +7,8 @@ from rest_framework.serializers import (
     HyperlinkedIdentityField
 )
 from .models import (
-    Category
+    Category,
+    ProductType
 )
 
 User = get_user_model()
@@ -62,3 +63,23 @@ class CategoryInputSerializers(serializers.Serializer):
 
         instance.save()
         return instance
+
+
+class ProductTypeSerializer(serializers.ModelSerializer):
+    """
+    show product_type object
+    """
+
+    class Meta:
+        model = ProductType
+        fields = ('name',)
+
+
+class ProductTypeInputSerializer(serializers.ModelSerializer):
+    """
+    create,update product_type object
+    """
+
+    class Meta:
+        model = ProductType
+        fields = ('name', 'is_active',)
