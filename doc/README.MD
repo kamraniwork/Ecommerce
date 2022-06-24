@@ -229,7 +229,7 @@
         "status":"Not found"
     }
     ```
-### list product_type
+## list product_type
 *   ###### Description: 
        return product_type object that `is_active==True`
 * ###### Request: `GET`  `http://localhost:8000/product-type/`
@@ -241,6 +241,36 @@
         "name": "کتاب"
     }
 ]
+```
+## retrieve product_type
+*   ###### Description: 
+       return product_type object that `is_active==True` with product_specification list
+* ###### Request: `GET`  `http://localhost:8000/product-type/{pk}`
+* ###### Param: `pk`
+* ###### Response:
+```json
+{
+    "pk": 1,
+    "name": "کتاب",
+    "typed_product": [
+        {
+            "pk": 1,
+            "name": "نویسنده"
+        },
+        {
+            "pk": 2,
+            "name": "قیمت"
+        },
+        {
+            "pk": 3,
+            "name": "تعداد صفحه"
+        },
+        {
+            "pk": 4,
+            "name": "تعداد فصل"
+        }
+    ]
+}
 ```
 ## create product_type
 * ###### Description: 
