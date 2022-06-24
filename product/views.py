@@ -12,7 +12,8 @@ from .serializers import (
     ProductTypeSerializer,
     ProductTypeDetailSerializer,
     ProductTypeInputSerializer,
-    ProductSpecificationListSerializer
+    ProductSpecificationListSerializer,
+    ProductSpecialInputSerializers
 )
 from django.shortcuts import get_object_or_404
 
@@ -202,16 +203,14 @@ class ProductSpecificationViewSet(ViewSet):
         throttle_classes = (CustomThrottlingUser,)
         return [throttle() for throttle in throttle_classes]
 
-    @action(detail=True, methods=['get'], permission_classes=(IsAdminUser,),
-            name='list product_specification for each product_specification')
-    def list_specification_product_type(self, request, pk):
+    def create(self, request):
         """
-        list product_specification objects for each product_type
-        pk is product_type object primary key
+        create product_specification object
+        :param name:char , product_type_name:char
         """
-
-        product_type = get_object_or_404(ProductType, pk=pk, is_active=True)
-        product_specification = ProductSpecification.objects.filter(product_type=product_type)
-        serializer = ProductSpecificationListSerializer(instance=product_specification, context={'request': request},
-                                                        many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer = ProductSpecialInputSerializers(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'status': 'create product_special object successfully'}, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

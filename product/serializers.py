@@ -8,7 +8,8 @@ from rest_framework.serializers import (
 )
 from .models import (
     Category,
-    ProductType
+    ProductType,
+    ProductSpecification,
 )
 
 User = get_user_model()
@@ -104,3 +105,37 @@ class ProductTypeInputSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductType
         fields = ('name', 'is_active',)
+
+
+class ProductSpecialInputSerializers(serializers.Serializer):
+    name = serializers.CharField(max_length=256)
+    product_type_name = serializers.CharField(max_length=256, required=True)
+
+    def create(self, validated_data):
+        """
+        create object by name and product_type_name
+        if dont exist product_type_name ==> error 404
+        """
+        name = validated_data.get('name')
+        product_type_name = validated_data.get('product_type_name')
+
+        product_type = get_object_or_404(ProductType, is_active=True, name=product_type_name)
+        product_special = ProductSpecification.objects.create(name=name, product_type=product_type)
+        return product_special
+
+    def update(self, instance, validated_data):
+        """
+        update product special object by product_type name
+        find object by product_type name
+        update name object
+        if dont exist product_type_name ==> error 404
+        """
+        name = validated_data.get('name')
+        product_type_name = validated_data.get('product_type_name')
+
+        product_type = get_object_or_404(ProductType, name=product_type_name, is_active=True)
+        instance.name = name
+        instance.product_type = product_type
+
+        instance.save()
+        return instance

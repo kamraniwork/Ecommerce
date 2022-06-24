@@ -357,6 +357,97 @@
         "status":"Not found"
     }
     ```
+  
+## create product_special
+* ###### Description: 
+    jsut superuser can create new product_special object
+    
+* ###### Request: `post`  `http://localhost:8000/product-specification/`
+* ###### Param:
+    *   `name`: required | ![](https://img.shields.io/static/v1?label=&message=string&color=red)
+    *   `product_type_name`: required | ![](https://img.shields.io/static/v1?label=&message=string&color=red)
+
+* ###### example:
+```json
+{
+    "name":"باتری",
+    "product_type_name":"لوازم دیجیتال"
+}
+```
+* ###### response:
+    if OK request:
+    `status=200`
+    ```json
+      {"status": "create product_special object successfully"}
+    ```
+    elif there is error:
+    `status=400`
+    ```json
+    {
+        "name": [
+            "This field is required."
+        ]
+    }
+    ```
+    else `status=404`
+    ```json
+    {
+      "detail": "Not found."
+    }
+    ```
+## update product_type
+* ###### Description: 
+    jsut superuser can update product_type object
+    
+* ###### Request: `put`  `http://localhost:8000/product-type/{pk}`
+* ###### Param:
+    *   `name`: not required | ![](https://img.shields.io/static/v1?label=&message=string&color=red)
+    *   `is_active`: not required | ![](https://img.shields.io/static/v1?label=&message=string&color=red)
+  
+* ###### example:
+```json
+{
+    "name":"لوازم دیجیتال",
+    "is_active": "true"
+}
+```
+* ###### response:
+    if OK request:
+    `status=200`
+    ```json
+    {
+      "name":"لوازم دیجیتال",
+      "is_active": "true"
+    }
+    ```
+    else if there is error:
+    `status=400`
+    ```json
+    {
+        "name": [
+            "This field is required."
+        ]
+    }
+    ```
+## delete product_type
+* ###### Description: 
+    delete product_type object by pk field
+    
+* ###### Request: `delete`  `http://localhost:8000/product-type/{pk}`
+* ###### Param: `None`
+* ###### response:
+    if OK request:
+    `status=200`
+    ```json
+      {"status": "deleted object"}
+    ```
+    else if there is error:
+    `status=404`
+    ```json
+    {
+        "status":"Not found"
+    }
+    ```
 ## security
 * ###### use throttling:
 user can not more than 3 each per second
