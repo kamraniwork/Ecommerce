@@ -183,6 +183,8 @@ class ProductTypeViewSet(ViewSet):
 
 
 class ProductSpecificationViewSet(ViewSet):
+    lookup_field = 'name'
+
     def get_permissions(self):
         """
         just superuser can create and update and destroy object
@@ -212,5 +214,18 @@ class ProductSpecificationViewSet(ViewSet):
         if serializer.is_valid():
             serializer.save()
             return Response({'status': 'create product_special object successfully'}, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def update(self, request, name=None):
+        """
+        update product_special object by name field
+        you can change name:char , product_type_name:char
+        """
+        product_special = get_object_or_404(ProductSpecification, name=name)
+        serializer = ProductTypeInputSerializer(product_special, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
