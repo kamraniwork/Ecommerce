@@ -10,6 +10,7 @@ from .models import (
     Category,
     ProductType,
     ProductSpecification,
+    Product
 )
 
 User = get_user_model()
@@ -139,3 +140,13 @@ class ProductSpecialInputSerializers(serializers.Serializer):
 
         instance.save()
         return instance
+
+
+class ProductListSerializer(serializers.ModelSerializer):
+    """
+    show list products
+    """
+
+    class Meta:
+        model = Product
+        fields = ('title', 'slug', 'regular_price', 'discount_price', 'updated_at',)
