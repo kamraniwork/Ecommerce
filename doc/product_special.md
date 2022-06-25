@@ -81,3 +81,22 @@
       "detail": "Not found."
     }
     ```
+## delete product_special
+* ###### Description: 
+    delete product_special object by name field, just superuser can delete this object
+    
+* ###### Request: `delete`  `http://localhost:8000/product-specification/{name}`
+* ###### Param: `None`
+* ###### response:
+    if OK request:
+    `status=200`
+    ```json
+      {"status": "deleted object"}
+    ```
+    else if there is error:
+    `status=404`
+    ```json
+    {
+        "status":"Not found"
+    }
+    ```

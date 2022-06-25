@@ -61,3 +61,13 @@ class ProductSpecificationViewSet(ViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def destroy(self, request, name=None):
+        """
+        destroy product_special object by name field
+        :param name:char
+        :return:
+        """
+        product_special = get_object_or_404(ProductSpecification, name=name)
+        product_special.delete()
+        return Response({'status': 'deleted object'}, status=status.HTTP_200_OK)

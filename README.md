@@ -9,10 +9,11 @@
 
 1. [Run project](https://github.com/kamraniwork/Ecommerce/blob/master/doc/run.md)
 2. [tests](https://github.com/kamraniwork/Ecommerce/blob/master/doc/test.md)
-3. [category](https://github.com/kamraniwork/Ecommerce/blob/master/doc/category.md)
-4. [product type](https://github.com/kamraniwork/Ecommerce/blob/master/doc/product_type.md)
-5. [product special](https://github.com/kamraniwork/Ecommerce/blob/master/doc/product_special.md)
-6. [security](https://github.com/kamraniwork/Ecommerce/blob/master/doc/security.md)
+2. endpoints
+    *   [category](https://github.com/kamraniwork/Ecommerce/blob/master/doc/category.md)
+    *   [product type](https://github.com/kamraniwork/Ecommerce/blob/master/doc/product_type.md)
+    *   [product special](https://github.com/kamraniwork/Ecommerce/blob/master/doc/product_special.md)
+4. [security](https://github.com/kamraniwork/Ecommerce/blob/master/doc/security.md)
 
 
 <p align="center"> 
