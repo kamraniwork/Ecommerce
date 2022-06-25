@@ -10,7 +10,8 @@ from product.serializers import (
     ProductTypeInputSerializer,
     ProductSpecificationListSerializer,
     ProductSpecialInputSerializers,
-    ProductListSerializer
+    ProductListSerializer,
+    ProductDetailSerializer
 )
 from django.shortcuts import get_object_or_404
 
@@ -46,3 +47,12 @@ class ProductViewSet(ViewSet):
         serializer = ProductListSerializer(instance=product_list, context={'request': request}, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    def retrieve(self, request, slug=None):
+        """
+        show product object
+        :param slug:Char
+        """
+        product = get_object_or_404(Product, slug=slug, is_active=True)
+
+        serializer = ProductDetailSerializer(instance=product, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)

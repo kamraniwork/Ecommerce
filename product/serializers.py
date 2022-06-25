@@ -150,3 +150,17 @@ class ProductListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ('title', 'slug', 'regular_price', 'discount_price', 'updated_at',)
+
+
+class ProductDetailSerializer(serializers.ModelSerializer):
+    """
+    show product object
+    """
+    product_type = ProductTypeDetailSerializer()
+    category = CategoryListSerializer()
+
+    class Meta:
+        model = Product
+        fields = (
+            'title', 'description', 'product_type', 'category', 'slug', 'regular_price', 'discount_price',
+            'updated_at',)
