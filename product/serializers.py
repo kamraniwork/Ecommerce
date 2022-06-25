@@ -187,8 +187,8 @@ class ProductInputSerializers(serializers.Serializer):
         regular_price = validated_data.get('regular_price')
         discount_price = validated_data.get('discount_price')
         is_active = validated_data.get('is_active')
-        product_type_name = validated_data.get('product_type_name', None)
-        category_name = validated_data.get('category_name', None)
+        product_type_name = validated_data.get('product_type_name')
+        category_name = validated_data.get('category_name')
 
         product_type = get_object_or_404(ProductType, is_active=True, name=product_type_name)
         category = get_object_or_404(Category, is_active=True, name=category_name)
@@ -198,3 +198,32 @@ class ProductInputSerializers(serializers.Serializer):
                                          is_active=is_active, slug=slug)
         return product
 
+    def update(self, instance, validated_data):
+        """
+        update product object by product_type_name or category_name or other fields
+        find object by product_type name
+        if dont exist product_type_name ==> error 404
+        """
+        title = validated_data.get('title', instance.title)
+        description = validated_data.get('description', instance.description)
+        slug = validated_data.get('slug', instance.slug)
+        regular_price = validated_data.get('regular_price', instance.regular_price)
+        discount_price = validated_data.get('discount_price', instance.discount_price)
+        is_active = validated_data.get('is_active', instance.is_active)
+        product_type_name = validated_data.get('product_type_name')
+        category_name = validated_data.get('category_name')
+
+        product_type = get_object_or_404(ProductType, is_active=True, name=product_type_name)
+        category = get_object_or_404(Category, is_active=True, name=category_name)
+
+        instance.product_type = product_type
+        instance.category = category
+        instance.title = title
+        instance.description = description
+        instance.slug = slug
+        instance.regular_price = regular_price
+        instance.discount_price = discount_price
+        instance.is_active = is_active
+
+        instance.save()
+        return instance

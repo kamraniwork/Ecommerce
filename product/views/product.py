@@ -70,3 +70,16 @@ class ProductViewSet(ViewSet):
 
         serializer = ProductDetailSerializer(instance=product, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def update(self, request, slug=None):
+        """
+        update object by slug field
+        """
+        product = get_object_or_404(Product, slug=slug, is_active=True)
+        serializer = ProductInputSerializers(product, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"status": "update product"}, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
