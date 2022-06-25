@@ -29,7 +29,7 @@ class ProductTypeTestCase(BaseTest):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_superuser_create_product_type(self):
-        """ Test just superuser can create category objects """
+        """ Test just superuser can create product_type objects """
 
         self.client.force_authenticate(user=self.superuser)
 
@@ -74,7 +74,7 @@ class ProductTypeTestCase(BaseTest):
         })
 
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(ProductType.objects.first().name, 'size')
+        self.assertEqual(ProductType.objects.first().name, 'book')
 
     def test_serializer_invalid_update_product_type(self):
         """ Test dont update object if invalid serializer """
@@ -85,7 +85,7 @@ class ProductTypeTestCase(BaseTest):
         res = self.client.put(url, {
             'names': 'color'
         })
-        self.assertEqual(ProductType.objects.first().name, "size")
+        self.assertEqual(ProductType.objects.first().name, "book")
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_delete_product_type(self):
