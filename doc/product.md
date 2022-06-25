@@ -2,9 +2,9 @@
 
 1. product endpoint
     *   [list](#list-product)
-    *   [create](#create-category)
-    *   [update](#update-category)
-    *   [delete](#delete-category)
+    *   [create](#create-product)
+    *   [update](#update-product)
+    *   [delete](#delete-product)
 
 ### list product
 *   ###### Description: 

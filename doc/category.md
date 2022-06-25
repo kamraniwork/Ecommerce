@@ -130,3 +130,20 @@
         "status":"Not found"
     }
     ```
+### list similar product  
+*   ###### Description: 
+       return all products that there are in sub category and `is_active=True`
+* ###### Request: `GET`  `http://localhost:8000/category/{slug}/similar_product/`
+* ###### Param: `None`
+* ###### Response:
+```json
+[
+    {
+        "title": "راهیان ارشد سیستم عامل",
+        "slug": "syskhalili",
+        "regular_price": "100.00",
+        "discount_price": "80.00",
+        "updated_at": "2022-06-25T07:51:08.313922Z"
+    }
+]
+```

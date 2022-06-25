@@ -1,10 +1,11 @@
 from rest_framework.viewsets import ViewSet
 from rest_framework import status
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.decorators import action
 from exention.throttling import CustomThrottlingUser
 from rest_framework.response import Response
-from product.models import Category
-from product.serializers import CategoryListSerializer, CategoryInputSerializers
+from product.models import Category, Product
+from product.serializers import CategoryListSerializer, CategoryInputSerializers, ProductListSerializer
 from django.shortcuts import get_object_or_404
 
 
@@ -90,3 +91,16 @@ class CategoryViewSet(ViewSet):
         category = get_object_or_404(Category, slug=slug)
         category.delete()
         return Response({'status': 'deleted object'}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['get'], name='similar product')
+    def similar_product(self, request, slug):
+        """
+        find similar product by same category
+        :param slug:char
+        :return all product that category.slug == slug
+        """
+        category = get_object_or_404(Category, is_active=True, slug=slug)
+        sub_category = category.get_all_child()
+        products = Product.objects.filter(category__in=sub_category, is_active=True)
+        serializer = ProductListSerializer(instance=products, context={'request': request}, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

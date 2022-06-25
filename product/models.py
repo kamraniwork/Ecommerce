@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from .managers import CategoryManager, ProductTypeManager
+from collections.abc import Iterable
 
 
 class Category(models.Model):
@@ -53,6 +54,20 @@ class Category(models.Model):
         return self.name
 
     objects = CategoryManager()
+
+    def flatten(self, xs):
+        for x in xs:
+            if isinstance(x, Iterable) and not isinstance(x, (str, bytes)):
+                yield from self.flatten(x)
+            else:
+                yield x
+
+    def get_all_child(self):
+        children = list()
+        for u in self.children.prefetch_related('children'):
+            children.append(u.get_all_child())
+        children.append(self)
+        return self.flatten(children)
 
 
 class ProductType(models.Model):
