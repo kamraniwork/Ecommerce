@@ -75,7 +75,7 @@ class ProductViewSet(ViewSet):
         """
         update object by slug field
         """
-        product = get_object_or_404(Product, slug=slug, is_active=True)
+        product = get_object_or_404(Product, slug=slug)
         serializer = ProductInputSerializers(product, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -83,3 +83,11 @@ class ProductViewSet(ViewSet):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def destroy(self, request, slug=None):
+        """
+        destroy product object by slug field
+        :param slug:
+        """
+        product = get_object_or_404(Product, slug=slug)
+        product.delete()
+        return Response({'status': 'deleted object'}, status=status.HTTP_200_OK)

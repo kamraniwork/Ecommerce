@@ -174,3 +174,22 @@
         ]
     }
     ```
+## delete product
+* ###### Description: 
+    delete product object by slug field
+    
+* ###### Request: `delete`  `http://localhost:8000/product/{slug}`
+* ###### Param: `None`
+* ###### response:
+    if OK request:
+    `status=200`
+    ```json
+      {"status": "deleted object"}
+    ```
+    else if there is error:
+    `status=404`
+    ```json
+    {
+        "status":"Not found"
+    }
+    ```
