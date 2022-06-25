@@ -83,3 +83,49 @@
     "updated_at": "2022-06-16T12:14:23.337005Z"
 }
 ```
+## create product
+* ###### Description: 
+    jsut superuser can create new product object
+    
+* ###### Request: `post`  `http://localhost:8000/product/`
+* ###### Param:
+    *   `title`: required | ![](https://img.shields.io/static/v1?label=&message=string&color=red)
+    *   `slug`: required | ![](https://img.shields.io/static/v1?label=&message=string&color=red)
+    *   `regular_price`: required | ![](https://img.shields.io/static/v1?label=&message=decimal&color=red)
+    *   `discount_price`: required | ![](https://img.shields.io/static/v1?label=&message=decimal&color=red)
+    *   `description`: not required | ![](https://img.shields.io/static/v1?label=&message=string&color=red)
+    *   `is_active`: auto False | ![](https://img.shields.io/static/v1?label=&message=boolean&color=red)
+    *   `product_type_name`: required | ![](https://img.shields.io/static/v1?label=&message=string&color=red)
+    *   `category_name`: required | ![](https://img.shields.io/static/v1?label=&message=string&color=red)
+* ###### example:
+```json
+{
+   "title": "test",
+   "slug": "test",
+   "regular_price": "100.00",
+   "discount_price": "80.00",
+   "description":"test",
+   "is_active":"true",
+   "product_type_name":"کتاب",
+   "category_name":"کنکور"
+}
+```
+* ###### response:
+    if OK request:
+    `status=200`
+    ```json
+      {"status": "create product object successfully"}
+    ```
+    else if there is error:
+    `status=400`
+    ```json
+    {
+        "title": [
+            "This field is required."
+        ],
+        "slug": [
+            "This field is required."
+        ]
+    }
+    ```
+  

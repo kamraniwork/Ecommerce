@@ -164,3 +164,37 @@ class ProductDetailSerializer(serializers.ModelSerializer):
         fields = (
             'title', 'description', 'product_type', 'category', 'slug', 'regular_price', 'discount_price',
             'updated_at',)
+
+
+class ProductInputSerializers(serializers.Serializer):
+    title = serializers.CharField(max_length=256, required=True)
+    description = serializers.CharField(max_length=1000)
+    slug = serializers.SlugField(max_length=50)
+    regular_price = serializers.DecimalField(max_digits=5, decimal_places=2, required=True)
+    discount_price = serializers.DecimalField(max_digits=5, decimal_places=2, required=True)
+    is_active = serializers.BooleanField(default=False)
+    product_type_name = serializers.CharField(max_length=256, required=True)
+    category_name = serializers.CharField(max_length=256, required=True)
+
+    def create(self, validated_data):
+        """
+        create object by product_type_name and category_name
+        if dont exist product_type_name or category_name ==> error 404
+        """
+        title = validated_data.get('title')
+        description = validated_data.get('description', None)
+        slug = validated_data.get('slug')
+        regular_price = validated_data.get('regular_price')
+        discount_price = validated_data.get('discount_price')
+        is_active = validated_data.get('is_active')
+        product_type_name = validated_data.get('product_type_name', None)
+        category_name = validated_data.get('category_name', None)
+
+        product_type = get_object_or_404(ProductType, is_active=True, name=product_type_name)
+        category = get_object_or_404(Category, is_active=True, name=category_name)
+        product = Product.objects.create(title=title, product_type=product_type, category=category,
+                                         description=description, regular_price=regular_price,
+                                         discount_price=discount_price,
+                                         is_active=is_active, slug=slug)
+        return product
+

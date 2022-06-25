@@ -11,7 +11,8 @@ from product.serializers import (
     ProductSpecificationListSerializer,
     ProductSpecialInputSerializers,
     ProductListSerializer,
-    ProductDetailSerializer
+    ProductDetailSerializer,
+    ProductInputSerializers
 )
 from django.shortcuts import get_object_or_404
 
@@ -46,6 +47,19 @@ class ProductViewSet(ViewSet):
         product_list = Product.objects.filter(is_active=True)
         serializer = ProductListSerializer(instance=product_list, context={'request': request}, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def create(self, request):
+        """
+        create product object
+        :param name:char, slug:char, parent_name:char
+
+        """
+        serializer = ProductInputSerializers(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'status': 'create product object successfully'}, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def retrieve(self, request, slug=None):
         """
