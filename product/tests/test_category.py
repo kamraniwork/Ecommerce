@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+import json
 from .test_main import BaseTest
 from rest_framework import status
 from django.urls import reverse
@@ -64,3 +65,36 @@ class CategoryTestCase(BaseTest):
         res = self.client.delete(url)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(Category.objects.all().count(), 0)
+
+    def test_list_similar_product(self):
+        """
+        test similar product list
+        """
+        response = self.client.get(reverse("product:category-similar-product", args=[Category.objects.first().slug]))
+        product = json.loads(response.content)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(product[0]['title'], 'django by example')
+
+    def test_list_similar_product_not_category(self):
+        """
+        test similar product list if there are no product ==> return null
+        """
+        response = self.client.get(reverse("product:category-similar-product", args=['net']))
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_list_similar_product_children_category(self):
+        """
+        test similar product list return product if category is children or sub category
+        """
+        category_2 = Category.objects.create(name='digital', slug='digi')
+        category_2_1 = Category.objects.create(name='mobile', slug='mobile', parent=category_2)
+
+        product = Product.objects.create(title="pride", product_type=self.product_type_main,
+                                         category=category_2, slug="pride", regular_price=100.00,
+                                         discount_price=80.00)
+
+        response = self.client.get(
+            reverse("product:category-similar-product", args=['digi']))
+        product = json.loads(response.content)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(product[0]['title'], 'pride')
