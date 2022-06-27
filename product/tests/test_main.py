@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework.test import APITestCase, APIClient
-from product.models import ProductType, Category, ProductSpecification
+from product.models import ProductType, Category, ProductSpecification, Product
 
 User = get_user_model()
 
@@ -22,3 +22,7 @@ class BaseTest(APITestCase):
         self.product_type_main = ProductType.objects.create(name="book")
         self.product_special_main = ProductSpecification.objects.create(name='pages',
                                                                         product_type=self.product_type_main)
+        self.product_main = Product.objects.create(title="django by example", product_type=self.product_type_main,
+                                                   category=self.category_main, slug="djexample", regular_price=100.00,
+                                                   discount_price=80.00)
+
