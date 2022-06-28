@@ -137,7 +137,8 @@ class ProductSpecification(models.Model):
     name = models.CharField(
         verbose_name=_("Name"),
         help_text=_("Required"),
-        max_length=255
+        max_length=255,
+        unique=True,
     )
 
     class Meta:
@@ -222,7 +223,7 @@ class ProductSpecificationValue(models.Model):
     """
 
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    specification = models.ForeignKey(ProductSpecification, null=True, on_delete=models.SET_NULL)
+    specification = models.ForeignKey(ProductSpecification, null=True, on_delete=models.CASCADE)
     value = models.CharField(
         verbose_name=_("value"),
         help_text=_("Product specification value (maximum of 255 words"),

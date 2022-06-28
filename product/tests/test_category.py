@@ -89,9 +89,9 @@ class CategoryTestCase(BaseTest):
         category_2 = Category.objects.create(name='digital', slug='digi')
         category_2_1 = Category.objects.create(name='mobile', slug='mobile', parent=category_2)
 
-        product = Product.objects.create(title="pride", product_type=self.product_type_main,
-                                         category=category_2, slug="pride", regular_price=100.00,
-                                         discount_price=80.00)
+        Product.objects.create(title="pride", product_type=self.product_type_main,
+                               category=category_2_1, slug="pride", regular_price=100.00,
+                               discount_price=80.00)
 
         response = self.client.get(
             reverse("product:category-similar-product", args=['digi']))
