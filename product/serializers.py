@@ -10,7 +10,8 @@ from .models import (
     Category,
     ProductType,
     ProductSpecification,
-    Product
+    Product,
+    ProductSpecificationValue
 )
 
 User = get_user_model()
@@ -224,6 +225,47 @@ class ProductInputSerializers(serializers.Serializer):
         instance.regular_price = regular_price
         instance.discount_price = discount_price
         instance.is_active = is_active
+
+        instance.save()
+        return instance
+
+
+class ProductSpecialValueInputSerializers(serializers.Serializer):
+    value = serializers.CharField(max_length=256, required=True)
+    product_slug = serializers.CharField(max_length=256, required=True)
+    specification_name = serializers.CharField(max_length=256, required=True)
+
+    def create(self, validated_data):
+        """
+        create object by value and product_name and specification_name
+        if dont exist product_name ==> error 404
+        """
+        value = validated_data.get('value')
+        product_slug = validated_data.get('product_slug')
+        specification_name = validated_data.get('specification_name')
+
+        product = get_object_or_404(Product, is_active=True, slug=product_slug)
+        product_special = get_object_or_404(ProductSpecification, name=specification_name)
+        product_special_value = ProductSpecificationValue.objects.create(value=value, product=product,
+                                                                         specification=product_special)
+        return product_special_value
+
+    def update(self, instance, validated_data):
+        """
+        update product special value object by pk
+        find object by product_special_value pk
+        update value object
+        """
+        value = validated_data.get('value')
+        product_slug = validated_data.get('product_slug')
+        specification_name = validated_data.get('specification_name')
+
+        product = get_object_or_404(Product, slug=product_slug, is_active=True)
+        specification = get_object_or_404(ProductSpecification, name=specification_name)
+
+        instance.value = value
+        instance.specification = specification
+        instance.product = product
 
         instance.save()
         return instance
