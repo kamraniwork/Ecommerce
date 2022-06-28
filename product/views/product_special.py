@@ -9,7 +9,8 @@ from product.models import ProductSpecification
 from product.serializers import (
     ProductTypeInputSerializer,
     ProductSpecificationListSerializer,
-    ProductSpecialInputSerializers
+    ProductSpecialInputSerializers,
+    ProductSpecialListInputSerializer
 )
 from django.shortcuts import get_object_or_404
 
@@ -36,6 +37,15 @@ class ProductSpecificationViewSet(ViewSet):
         """
         throttle_classes = (CustomThrottlingUser,)
         return [throttle() for throttle in throttle_classes]
+
+    def list(self, request):
+        """
+        show list product_special objects
+        """
+        product_special = ProductSpecification.objects.all()
+        serializer = ProductSpecialListInputSerializer(instance=product_special, context={'request': request},
+                                                       many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request):
         """

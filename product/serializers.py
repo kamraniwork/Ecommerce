@@ -109,6 +109,16 @@ class ProductTypeInputSerializer(serializers.ModelSerializer):
         fields = ('name', 'is_active',)
 
 
+class ProductSpecialListInputSerializer(serializers.ModelSerializer):
+    """
+    show list objects
+    """
+
+    class Meta:
+        model = ProductSpecification
+        fields = ('pk', 'name',)
+
+
 class ProductSpecialInputSerializers(serializers.Serializer):
     name = serializers.CharField(max_length=256)
     product_type_name = serializers.CharField(max_length=256, required=True)
