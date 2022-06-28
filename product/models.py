@@ -223,7 +223,8 @@ class ProductSpecificationValue(models.Model):
     """
 
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    specification = models.ForeignKey(ProductSpecification, null=True, on_delete=models.CASCADE)
+    specification = models.ForeignKey(ProductSpecification, null=True, on_delete=models.CASCADE,
+                                      related_name="special_value_product")
     value = models.CharField(
         verbose_name=_("value"),
         help_text=_("Product specification value (maximum of 255 words"),

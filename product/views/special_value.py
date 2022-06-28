@@ -58,7 +58,7 @@ class ProductSpecificationValueViewSet(ViewSet):
         serializer = ProductSpecialValueInputSerializers(product_special_value, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response("update object", status=status.HTTP_200_OK)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

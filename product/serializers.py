@@ -68,14 +68,26 @@ class CategoryInputSerializers(serializers.Serializer):
         return instance
 
 
+class ProductSpecialValueSerializer(serializers.ModelSerializer):
+    """
+    show list objects
+    """
+
+    class Meta:
+        model = ProductSpecificationValue
+        fields = ('pk', 'value')
+
+
 class ProductSpecificationListSerializer(serializers.ModelSerializer):
     """
     show product_specification object
     """
 
+    special_value_product = ProductSpecialValueSerializer(many=True)
+
     class Meta:
-        model = ProductType
-        fields = ('pk', 'name')
+        model = ProductSpecification
+        fields = ('pk', 'name', 'special_value_product')
 
 
 class ProductTypeDetailSerializer(serializers.ModelSerializer):
@@ -109,14 +121,14 @@ class ProductTypeInputSerializer(serializers.ModelSerializer):
         fields = ('name', 'is_active',)
 
 
-class ProductSpecialListInputSerializer(serializers.ModelSerializer):
+class ProductSpecialListSerializer(serializers.ModelSerializer):
     """
     show list objects
     """
 
     class Meta:
         model = ProductSpecification
-        fields = ('pk', 'name',)
+        fields = ('pk', 'name')
 
 
 class ProductSpecialInputSerializers(serializers.Serializer):
@@ -173,7 +185,8 @@ class ProductDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = (
-            'title', 'description', 'product_type', 'category', 'slug', 'regular_price', 'discount_price',
+            'title', 'description', 'product_type', 'category', 'slug', 'regular_price',
+            'discount_price',
             'updated_at',)
 
 

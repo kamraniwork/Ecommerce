@@ -31,56 +31,48 @@
 * ###### Response:
 ```json
 {
-    "title": "راهیان ارشد سیستم عامل",
-    "description": "کتاب بسیار عالی",
+    "title": "A51",
+    "description": "mobile A51",
     "product_type": {
-        "pk": 1,
-        "name": "کتاب",
+        "pk": 2,
+        "name": "mobile",
         "typed_product": [
             {
-                "pk": 2,
-                "name": "قیمت"
-            },
-            {
                 "pk": 3,
-                "name": "تعداد صفحه"
+                "name": "os",
+                "special_value_product": [
+                    {
+                        "pk": 1,
+                        "value": "mx150"
+                    },
+                    {
+                        "pk": 3,
+                        "value": "android"
+                    }
+                ]
             },
             {
                 "pk": 4,
-                "name": "تعداد فصل"
-            }
-        ]
-    },
-    "category": {
-        "name": "کنکور",
-        "slug": "konkur",
-        "parent": null,
-        "children": [
-            {
-                "name": "سیستم عامل",
-                "slug": "sstm-aaml",
-                "parent": 1,
-                "children": [
+                "name": "ram",
+                "special_value_product": [
                     {
-                        "name": "مدیریت دیسک",
-                        "slug": "mdrt-ds",
-                        "parent": 2,
-                        "children": []
-                    },
-                    {
-                        "name": "مدیریت حافظه",
-                        "slug": "mhafeze",
-                        "parent": 2,
-                        "children": []
+                        "pk": 4,
+                        "value": "128"
                     }
                 ]
             }
         ]
     },
-    "slug": "syskhalili",
+    "category": {
+        "name": "mobile",
+        "slug": "mobile",
+        "parent": 5,
+        "children": []
+    },
+    "slug": "a51",
     "regular_price": "100.00",
     "discount_price": "80.00",
-    "updated_at": "2022-06-16T12:14:23.337005Z"
+    "updated_at": "2022-06-28T09:07:12.706998Z"
 }
 ```
 ## create product
