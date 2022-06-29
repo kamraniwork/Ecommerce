@@ -23,6 +23,7 @@ class CategoryListSerializer(serializers.ModelSerializer):
     show list category
     support many nested category
     """
+    similar = HyperlinkedIdentityField(view_name='product:category-similar-product', lookup_field='slug')
 
     def to_representation(self, obj):
         # Add any self-referencing fields here (if not already done)
@@ -32,7 +33,7 @@ class CategoryListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ('name', 'slug', 'parent')
+        fields = ('similar', 'name', 'slug', 'parent')
 
 
 class CategoryInputSerializers(serializers.Serializer):
@@ -71,7 +72,7 @@ class CategoryInputSerializers(serializers.Serializer):
 
 class ProductSpecialValueSerializer(serializers.ModelSerializer):
     """
-    show list objects
+    show list product_specification_value object
     """
 
     class Meta:
@@ -106,10 +107,11 @@ class ProductTypeSerializer(serializers.ModelSerializer):
     """
     show product_type object
     """
+    detail = HyperlinkedIdentityField(view_name='product:product-type-detail')
 
     class Meta:
         model = ProductType
-        fields = ('pk', 'name')
+        fields = ('detail', 'name')
 
 
 class ProductTypeInputSerializer(serializers.ModelSerializer):
@@ -161,94 +163,6 @@ class ProductSpecialInputSerializers(serializers.Serializer):
         product_type = get_object_or_404(ProductType, name=product_type_name, is_active=True)
         instance.name = name
         instance.product_type = product_type
-
-        instance.save()
-        return instance
-
-
-class ProductListSerializer(serializers.ModelSerializer):
-    """
-    show list products
-    """
-
-    class Meta:
-        model = Product
-        fields = ('title', 'slug', 'regular_price', 'discount_price', 'updated_at',)
-
-
-class ProductDetailSerializer(serializers.ModelSerializer):
-    """
-    show product object
-    """
-    product_type = ProductTypeDetailSerializer()
-    category = CategoryListSerializer()
-
-    class Meta:
-        model = Product
-        fields = (
-            'title', 'description', 'product_type', 'category', 'slug', 'regular_price',
-            'discount_price',
-            'updated_at',)
-
-
-class ProductInputSerializers(serializers.Serializer):
-    title = serializers.CharField(max_length=256, required=True)
-    description = serializers.CharField(max_length=1000)
-    slug = serializers.SlugField(max_length=50)
-    regular_price = serializers.DecimalField(max_digits=5, decimal_places=2, required=True)
-    discount_price = serializers.DecimalField(max_digits=5, decimal_places=2, required=True)
-    is_active = serializers.BooleanField(default=False)
-    product_type_name = serializers.CharField(max_length=256, required=True)
-    category_name = serializers.CharField(max_length=256, required=True)
-
-    def create(self, validated_data):
-        """
-        create object by product_type_name and category_name
-        if dont exist product_type_name or category_name ==> error 404
-        """
-        title = validated_data.get('title')
-        description = validated_data.get('description', None)
-        slug = validated_data.get('slug')
-        regular_price = validated_data.get('regular_price')
-        discount_price = validated_data.get('discount_price')
-        is_active = validated_data.get('is_active')
-        product_type_name = validated_data.get('product_type_name')
-        category_name = validated_data.get('category_name')
-
-        product_type = get_object_or_404(ProductType, is_active=True, name=product_type_name)
-        category = get_object_or_404(Category, is_active=True, name=category_name)
-        product = Product.objects.create(title=title, product_type=product_type, category=category,
-                                         description=description, regular_price=regular_price,
-                                         discount_price=discount_price,
-                                         is_active=is_active, slug=slug)
-        return product
-
-    def update(self, instance, validated_data):
-        """
-        update product object by product_type_name or category_name or other fields
-        find object by product_type name
-        if dont exist product_type_name ==> error 404
-        """
-        title = validated_data.get('title', instance.title)
-        description = validated_data.get('description', instance.description)
-        slug = validated_data.get('slug', instance.slug)
-        regular_price = validated_data.get('regular_price', instance.regular_price)
-        discount_price = validated_data.get('discount_price', instance.discount_price)
-        is_active = validated_data.get('is_active', instance.is_active)
-        product_type_name = validated_data.get('product_type_name')
-        category_name = validated_data.get('category_name')
-
-        product_type = get_object_or_404(ProductType, is_active=True, name=product_type_name)
-        category = get_object_or_404(Category, is_active=True, name=category_name)
-
-        instance.product_type = product_type
-        instance.category = category
-        instance.title = title
-        instance.description = description
-        instance.slug = slug
-        instance.regular_price = regular_price
-        instance.discount_price = discount_price
-        instance.is_active = is_active
 
         instance.save()
         return instance
@@ -348,3 +262,93 @@ class ProductImageInputSerializer(serializers.Serializer):
 
         instance.save()
         return instance
+
+
+class ProductListSerializer(serializers.ModelSerializer):
+    """
+    show list products
+    """
+    detail = HyperlinkedIdentityField(view_name='product:product-detail', lookup_field='slug')
+
+    class Meta:
+        model = Product
+        fields = ('detail', 'title', 'slug', 'regular_price', 'discount_price', 'updated_at',)
+
+
+class ProductInputSerializers(serializers.Serializer):
+    title = serializers.CharField(max_length=256, required=True)
+    description = serializers.CharField(max_length=1000)
+    slug = serializers.SlugField(max_length=50)
+    regular_price = serializers.DecimalField(max_digits=5, decimal_places=2, required=True)
+    discount_price = serializers.DecimalField(max_digits=5, decimal_places=2, required=True)
+    is_active = serializers.BooleanField(default=False)
+    product_type_name = serializers.CharField(max_length=256, required=True)
+    category_name = serializers.CharField(max_length=256, required=True)
+
+    def create(self, validated_data):
+        """
+        create object by product_type_name and category_name
+        if dont exist product_type_name or category_name ==> error 404
+        """
+        title = validated_data.get('title')
+        description = validated_data.get('description', None)
+        slug = validated_data.get('slug')
+        regular_price = validated_data.get('regular_price')
+        discount_price = validated_data.get('discount_price')
+        is_active = validated_data.get('is_active')
+        product_type_name = validated_data.get('product_type_name')
+        category_name = validated_data.get('category_name')
+
+        product_type = get_object_or_404(ProductType, is_active=True, name=product_type_name)
+        category = get_object_or_404(Category, is_active=True, name=category_name)
+        product = Product.objects.create(title=title, product_type=product_type, category=category,
+                                         description=description, regular_price=regular_price,
+                                         discount_price=discount_price,
+                                         is_active=is_active, slug=slug)
+        return product
+
+    def update(self, instance, validated_data):
+        """
+        update product object by product_type_name or category_name or other fields
+        find object by product_type name
+        if dont exist product_type_name ==> error 404
+        """
+        title = validated_data.get('title', instance.title)
+        description = validated_data.get('description', instance.description)
+        slug = validated_data.get('slug', instance.slug)
+        regular_price = validated_data.get('regular_price', instance.regular_price)
+        discount_price = validated_data.get('discount_price', instance.discount_price)
+        is_active = validated_data.get('is_active', instance.is_active)
+        product_type_name = validated_data.get('product_type_name')
+        category_name = validated_data.get('category_name')
+
+        product_type = get_object_or_404(ProductType, is_active=True, name=product_type_name)
+        category = get_object_or_404(Category, is_active=True, name=category_name)
+
+        instance.product_type = product_type
+        instance.category = category
+        instance.title = title
+        instance.description = description
+        instance.slug = slug
+        instance.regular_price = regular_price
+        instance.discount_price = discount_price
+        instance.is_active = is_active
+
+        instance.save()
+        return instance
+
+
+class ProductDetailSerializer(serializers.ModelSerializer):
+    """
+    show product object
+    """
+    product_type = ProductTypeDetailSerializer()
+    category = CategoryListSerializer()
+    product_image = ProductImageListSerializer(many=True)
+
+    class Meta:
+        model = Product
+        fields = (
+            'title', 'product_image', 'description', 'product_type', 'category', 'slug', 'regular_price',
+            'discount_price',
+            'updated_at',)
