@@ -1,6 +1,11 @@
 from django.contrib.auth import get_user_model
 from rest_framework.test import APITestCase, APIClient
-from product.models import ProductType, Category, ProductSpecification, Product, ProductSpecificationValue
+from product.models import ProductType, Category, ProductSpecification, Product, ProductSpecificationValue, ProductImage
+import PIL
+from django.core.files.uploadedfile import tempfile
+from django.core.files import File
+import os
+from django.conf import settings
 
 User = get_user_model()
 
@@ -31,3 +36,11 @@ class BaseTest(APITestCase):
             specification=self.product_special_main,
             value="500"
         )
+
+        image = PIL.Image.new('RGB', size=(1, 1))
+        self.file = tempfile.NamedTemporaryFile(suffix='.jpg')
+        image.save(self.file)
+        fn = os.path.join(settings.MEDIA_ROOT, 'images', 'test.jpg')
+        img = ProductImage(product=self.product_main, alt_text="main image")
+        with open(fn, encoding="utf8", errors='ignore') as f:
+            img.image.save(fn, f)
