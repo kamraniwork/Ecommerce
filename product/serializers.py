@@ -11,6 +11,7 @@ from .models import (
     ProductType,
     ProductSpecification,
     Product,
+    ProductImage,
     ProductSpecificationValue
 )
 
@@ -289,6 +290,61 @@ class ProductSpecialValueInputSerializers(serializers.Serializer):
         instance.value = value
         instance.specification = specification
         instance.product = product
+
+        instance.save()
+        return instance
+
+
+class ProductImageListSerializer(serializers.ModelSerializer):
+    """
+    for show list image
+    """
+
+    class Meta:
+        model = ProductImage
+        fields = ['pk', 'image', 'alt_text']
+
+
+class ProductImageInputSerializer(serializers.Serializer):
+    """
+    for show Detail object image
+    """
+    product_slug = serializers.CharField(max_length=256, required=True)
+    image = serializers.ImageField()
+    alt_text = serializers.CharField(max_length=256)
+    is_feature = serializers.BooleanField()
+
+    def create(self, validated_data):
+        """
+        create object by value and product_name and specification_name
+        if dont exist product_name ==> error 404
+        """
+        image = validated_data.get('image')
+        product_slug = validated_data.get('product_slug')
+        is_feature = validated_data.get('is_feature', False)
+        alt_text = validated_data.get('alt_text', None)
+
+        product = get_object_or_404(Product, is_active=True, slug=product_slug)
+        product_image = ProductImage.objects.create(product=product, image=image, is_feature=is_feature,
+                                                    alt_text=alt_text)
+        return product_image
+
+    def update(self, instance, validated_data):
+        """
+        update product image object by pk
+        find object by product image pk
+        """
+        image = validated_data.get('image')
+        product_slug = validated_data.get('product_slug')
+        is_feature = validated_data.get('is_feature', False)
+        alt_text = validated_data.get('alt_text', None)
+
+        product = get_object_or_404(Product, is_active=True, slug=product_slug)
+
+        instance.product = product
+        instance.image = image
+        instance.alt_text = alt_text
+        instance.is_feature = is_feature
 
         instance.save()
         return instance
